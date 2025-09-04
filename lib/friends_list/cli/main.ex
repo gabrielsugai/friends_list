@@ -5,11 +5,17 @@ defmodule FriendsList.CLI.Main do
     Shell.cmd("clear")
     welcome_message()
     Shell.prompt("Press ENTER to continue...")
+    starts_menu_choice()
   end
 
-  def welcome_message do
+  # Funcao privada
+  defp welcome_message do
     Shell.info("=============== Friends List ===============")
     Shell.info("   Welcome to your personal friend list!")
     Shell.info("============================================")
+  end
+
+  defp starts_menu_choice do
+    FriendsList.CLI.MenuChoice.start
   end
 end
