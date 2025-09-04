@@ -3,7 +3,5 @@ defmodule Mix.Tasks.Start do
 
   # Para que a task apareca no mix help e necessario que adc essa descricao
   @shortdoc "Start [Friends List App]"
-  def run(_) do
-    IO.puts("Staring...")
-  end
+  def run(_), do: FriendsList.CLI.Main.start_app
 end
