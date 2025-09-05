@@ -7,15 +7,18 @@ defmodule FriendsList.CLI.Menu.Choice do
     Shell.info("Choose an option:")
 
     menu_itens = Itens.all()
-    find_menu_item_by_index = &Enum.at(menu_itens, &1, :error) # Declaracao de funcao anonima que escolhe um item da lista / o terceiro parametro eh o valor default caso o index nao exista na lista
+    # find_menu_item_by_index = &Enum.at(menu_itens, &1, :error) # Declaracao de funcao anonima que escolhe um item da lista / o terceiro parametro eh o valor default caso o index nao exista na lista
 
     menu_itens
     |> Enum.map(&(&1.label)) # Pipe operator + funcao anonima reduzida
     |> display_options()
     |> generate_question()
     |> Shell.prompt
+    |> prepare_input()
     |> parse_answer()
-    |> find_menu_item_by_index.()
+    |> IO.inspect(label: "Parsed answer")
+    |> find_menu_item_by_index()
+    # |> IO.inspect(label: "Chosen menu item")
     |> confirm_menu_item()
     |> confirm_menu_item_flow()
   end
@@ -30,16 +33,32 @@ defmodule FriendsList.CLI.Menu.Choice do
     options # Retorna o options para que o retorno da funcao seja utilizado com o pipe operator para a proxima funcao
   end
 
+  defp prepare_input(input) do
+    case Integer.parse(input) do
+      :error -> :error
+      {option, _} -> option
+    end
+  end
+  
+  defp find_menu_item_by_index(index) do
+    case index do
+      :error -> :error
+      :ok -> nil
+      _ -> Enum.at(Itens.all(), index, :error)
+    end
+  end
+
   defp generate_question(options) do
     options = Enum.join(1..Enum.count(options), ", ")
     "Choose one of the above options: [#{options}]\n"
   end
 
-  defp parse_answer(answer) do
-    case Integer.parse(answer) do
-      :error -> invalid_input()
-      {option, _} -> option - 1 # O case utiliza pattern matching para verificar se o retorno de Integer.parse eh :error ou uma tupla {option, _} e retorna o valor de option
-    end
+  defp parse_answer(answer) when is_integer(answer) do
+    answer - 1
+  end
+
+  defp parse_answer(_) do
+    invalid_input()
   end
   
   defp invalid_input do
