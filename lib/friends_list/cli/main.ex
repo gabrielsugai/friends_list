@@ -16,6 +16,6 @@ defmodule FriendsList.CLI.Main do
   end
 
   defp starts_menu_choice do
-    FriendsList.CLI.MenuChoice.start
+    FriendsList.CLI.Menu.Choice.start
   end
 end
