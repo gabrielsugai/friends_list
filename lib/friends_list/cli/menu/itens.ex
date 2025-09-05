@@ -1,4 +1,4 @@
-defmodule FriendsList.CLI.MenuItens do
+defmodule FriendsList.CLI.Menu.Itens do
   alias FriendsList.CLI.Menu # Nao precisa do "as" pq o elixir entende que vc vai utilizar o ultimo modulo (Menu)
 
   def all do
