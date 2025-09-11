@@ -1,6 +1,7 @@
 defmodule FriendsList.CLI.Menu.Choice do
   alias Mix.Shell.IO, as: Shell
   alias FriendsList.CLI.Menu.Itens
+  alias FriendsList.DB.CSV
 
   def start do
     Shell.cmd("clear")
@@ -18,6 +19,7 @@ defmodule FriendsList.CLI.Menu.Choice do
     |> find_menu_item_by_index.()
     |> confirm_menu_item()
     |> confirm_menu_item_flow()
+    |> CSV.perform()
   end
 
   defp display_options(options) do
@@ -61,7 +63,7 @@ defmodule FriendsList.CLI.Menu.Choice do
     Shell.info("You chose: #{chosen_menu_item.label}\n")
 
     if Shell.yes?("Is that correct? [y/n]") do
-      Shell.info("... #{chosen_menu_item.label} ...\n")
+      chosen_menu_item
     else
       start()
     end
