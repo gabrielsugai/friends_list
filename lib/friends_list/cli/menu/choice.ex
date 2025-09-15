@@ -35,7 +35,7 @@ defmodule FriendsList.CLI.Menu.Choice do
   defp parse_answer(input) do
     case Integer.parse(input) do
       :error -> invalid_input()
-      {option, _} -> option
+      {option, _} -> option - 1 # Ajusta o index para comecar em 0
     end
   end
 
