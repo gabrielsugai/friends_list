@@ -6,12 +6,21 @@ defmodule FriendsList.DB.CSV do
   def perform(chosen_menu_item) do
     case chosen_menu_item do
       %Menu{ id: :create, label: _ } -> create()
-      %Menu{ id: :read, label: _ }   -> Shell.info("Read selected")
+      %Menu{ id: :read, label: _ }   -> read()
       %Menu{ id: :update, label: _ } -> Shell.info("Update selected")
       %Menu{ id: :delete, label: _ } -> Shell.info("Delete selected")
     end
 
     Menu.Choice.start()
+  end
+
+  defp read do
+    File.read!("#{File.cwd!}/friends.csv")
+    |> CSVParser.parse_string(headers: false)
+    |> Enum.map(fn [email, name, phone] ->
+      %{ name: name, email: email, phone: phone }
+    end)
+    |> Scribe.console(data: [{"Nome", :name}, {"Email", :email}, {"Telefone", :phone}])
   end
 
   defp create do
